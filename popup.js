@@ -20,7 +20,7 @@ function openNewTab() {
 addProjBtn.onclick = openModal;
 addProjKeyBtn.onclick = addProjectKey;
 submitBtn.onclick = openNewTab;
-projectKeySelect.onchange = saveDropDownSelection;
+//projectKeySelect.onchange = saveDropDownSelection;
 window.onload = useStoredOptionsForDisplayInDOM;
 
 // Submit on Enter key press
@@ -30,17 +30,18 @@ issueIdInput.onkeyup = () => {
      }
 }
 
-function saveDropDownSelection(key) {
+/*function saveDropDownSelection(key) {
     chrome.storage.local.set({
         projectKey: projectKeySelect.value
 });
-}
+}*/
 
 function useStoredOptionsForDisplayInDOM() {
     chrome.storage.local.get({
         projectKeys: '',
     }, function(items) {
         //Store retrieved options as the selected values in the DOM
+        projectKeySelect.innerHTML = "";
         items.projectKeys.map(key => {
         projectKeySelect.innerHTML += `<option>${key}</option>`;
     })
@@ -48,9 +49,12 @@ function useStoredOptionsForDisplayInDOM() {
 }
 
 function addProjectKey(){
-   projects.push(addProjKeyInput.value)
+ //  projects.push(addProjKeyInput.value)
+  // alert(projects)
    chrome.storage.local.set({
-    projectKeys: projects
+       // TODO - push addProjKeyInput.value directly to storage object instead of using projects variable
+    projectKeys: '[]'
+    projectKeys.push(addProjKeyInput.value)
    })
     closeModal()
     useStoredOptionsForDisplayInDOM()
