@@ -21,6 +21,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        flex: 1;
       }
       .explanation-text {
         font-size: 10px;
@@ -34,22 +35,46 @@
         font-size: 10px;
         font-style: italic;
       }
-      .addProject{
+      .addProjectBtn{
+        width: 20px;
+        height: 20px;
+        line-height: 16px;
+        background-color: cornflowerblue;
         font-size: 20px;
         font-weight: 900;
-        color: cornflowerblue;
+        color: white;
+        border-radius: 20px;
+        text-align: center;
+        vertical-align: center;
+      }
+      .modal{
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        display: none;
+        left: 0px;
+        right: 0px;
+        z-index: 1;
+        align-content: center;
+        position: absolute;
       }
     </style>
   </head>
   <body>
+    <div id="modal" class="modal">
+        <div class="wrapper">
+            <input type="text" autofocus placeholder="Add new project key, e.g. 'APP'" id="addProjectKey-input" />
+        <button id="addProjectKey-btn">Add</button>
+        </div>
+    </div>
     <div class="wrapper">
       <h2>JIRA issue launcher</h2>
       <select name="select" id="project-select">
-        <option value="NEXT">NEXT</option>
-        <option value="AMBU">AMBU</option>
-        <option value="UJ">UJ</option>
       </select>
-      <div class="addProject">+</div>
+      <div id="addproject-btn">
+        <div class="addProjectBtn">+</div>
+        <div class="explanation-text">Add new project key</div>
+      </div>
       <input type="text" autofocus placeholder="Issue ID" id="id-input" />
       <button id="submit-btn">Go!</button>
       <div class="explanation-text">Click or hit Enter</div>
