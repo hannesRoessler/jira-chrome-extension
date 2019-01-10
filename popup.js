@@ -9,19 +9,17 @@ let projectKeySelect = document.getElementById('project-select')
 let jiraBaseUrl = "https://miamed.atlassian.net/browse/"
 let projects = []
 
+addProjBtn.onclick = openModal;
+addProjKeyBtn.onclick = addProjectKey;
+submitBtn.onclick = openNewTab;
+window.onload = useStoredOptionsForDisplayInDOM;
+//projectKeySelect.onchange = saveDropDownSelection;
+
 
 function openNewTab() {
     let url = jiraBaseUrl + projectKeySelect.value + "-" + issueIdInput.value
     chrome.tabs.create({'url': url});
 }
-
-
-// Submit on Button click
-addProjBtn.onclick = openModal;
-addProjKeyBtn.onclick = addProjectKey;
-submitBtn.onclick = openNewTab;
-//projectKeySelect.onchange = saveDropDownSelection;
-window.onload = useStoredOptionsForDisplayInDOM;
 
 // Submit on Enter key press
 issueIdInput.onkeyup = () => {
@@ -48,13 +46,14 @@ function useStoredOptionsForDisplayInDOM() {
     });
 }
 
+
 function addProjectKey(){
  //  projects.push(addProjKeyInput.value)
   // alert(projects)
-   chrome.storage.local.set({
-       // TODO - push addProjKeyInput.value directly to storage object instead of using projects variable
-    projectKeys: '[]'
-    projectKeys.push(addProjKeyInput.value)
+    chrome.storage.local.get({projectKeys: '',}, function(items) {
+    var projects = items[1]
+    var newProjectKeys = projects.push(addProjKeyInput.value)
+    chrome.storage.local.set({projectKeys: newProjectKeys})
    })
     closeModal()
     useStoredOptionsForDisplayInDOM()
