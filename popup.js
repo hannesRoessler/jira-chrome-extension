@@ -28,12 +28,6 @@ issueIdInput.onkeyup = () => {
      }
 }
 
-/*function saveDropDownSelection(key) {
-    chrome.storage.local.set({
-        projectKey: projectKeySelect.value
-});
-}*/
-
 function useStoredOptionsForDisplayInDOM() {
     chrome.storage.local.get({
         projectKeys: '',
@@ -49,13 +43,15 @@ function useStoredOptionsForDisplayInDOM() {
 
 function addProjectKey(){
     storedKeys.push(addProjKeyInput.value)
-    chrome.storage.local.set({
-    projectKeys: storedKeys
-    })
-     closeModal()
-     useStoredOptionsForDisplayInDOM()
+    storeProjectKeys(storedKeys)
+    closeModal()
+    useStoredOptionsForDisplayInDOM()
  }
-
+function storeProjectKeys(projectKeys){
+    chrome.storage.local.set({
+        projectKeys: storedKeys
+    })
+}
 
 function openModal(){
     modal.style.display = "block"
@@ -63,7 +59,3 @@ function openModal(){
 function closeModal(){
     modal.style.display = "none"
 }
-
-
-
-//        <option value="NEXT">NEXT</option>
