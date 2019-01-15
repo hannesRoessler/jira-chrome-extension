@@ -5,9 +5,10 @@
       input {
         padding: 10px;
         margin-top: 10px;
+        width: 90%;
       }
       button {
-        width: 80%;
+        width: 100%;
         margin-top: 10px;
         padding: 5px;
       }
@@ -19,9 +20,10 @@
       .main-wrapper {
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
         flex: 1;
+        height: 280px;
+        width: 250px;
       }
       .addkey-wrapper{
         display: flex;
@@ -33,7 +35,7 @@
         font-weight: 200;
         font-style: italic;
         color: gray;
-        margin-top: 0px;
+        margin-top: 10px;
       }
       ::-webkit-input-placeholder {
         color: gray;
@@ -52,11 +54,13 @@
         text-align: center;
         vertical-align: center;
         cursor: pointer;
+        align-self: center;
+        margin: 5px;
+        margin-top: 10px;
       }
       .modal{
-        overflow-x: hidden;
-        width: 100%;
-        height: 100%;
+        height: 210px;
+        width: 260px;
         background-color: white;
         display: none;
         left: 0px;
@@ -83,7 +87,7 @@
         display: flex;
         flex-direction: row;
         line-height: 14px;
-        background-color: cornflowerblue;
+        background-color: rgb(177, 200, 243);
         font-size: 12px;
         font-weight: 500;
         color: white;
@@ -95,34 +99,62 @@
         margin: 4px;
         justify-content:space-between;
       }
+      .issue-key-wrapper{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .bottom-btn{
+        position: fixed;
+        bottom: 0px;
+        float: right;
+        width: 100%;
+        height: 28px;
+        line-height: 28px;
+        font-size: 14px;
+        text-align: center;
+        background-color: white;
+        cursor: pointer;
+        font-weight: 500;
+        border-top: 1px solid lightblue;
+      }
+      .addProjectKey-input{
+        text-transform: uppercase
+      }
     </style>
   </head>
   <body>
     <div id="modal" class="modal">
         <div class="addkey-wrapper">
-            <input type="text" autofocus placeholder="Add new project key, e.g. 'APP'" id="addProjectKey-input" />
-        <button id="addProjectKey-btn">Add</button>
-        <button id="cancel-btn">Close</button>
+            <input type="text" autofocus placeholder="Add new project key, e.g. 'APP'" id="addProjectKey-input" class="addProjectKey-input"/>
+        
+        <div id="addProjectKey-btn" class="addProject-btn">+</div>
+       
         </div>
         
         <div id="keyList">
           <h2>Existing keys</h2>
         </div>
+        <div id="cancel-btn" class="bottom-btn">Close</div>
         </div>
 
 
 
     <div class="main-wrapper">
-      <h2>JIRA issue launcher</h2>
-      <select name="select" id="project-select">
-      </select>
-      <div id="addproject-btn">
-        <div class="addProject-btn">+</div>
-        <div class="explanation-text">Manage project keys</div>
+      <h2>JIRA Issue Launcher</h2>
+      <div class="issue-key-wrapper">
+        <select name="select" id="project-select">
+        </select>
+        <div id="addproject-btn">
+          <div class="addProject-btn">+</div>
+        </div>
       </div>
+
       <input type="text" autofocus placeholder="Issue ID" id="id-input" />
-      <button id="submit-btn">Go!</button>
-      <div class="explanation-text">(Enter)</div>
+      <div class="explanation-text">Enter one or several JIRA Project keys. Then choose the project key and enter the issue ID. Confirm using the button or hit enter.</div>
+      <div id="submit-btn" class="bottom-btn">Go!</div>
       <script src="popup.js"></script>
     </div>
   </body>

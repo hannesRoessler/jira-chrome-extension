@@ -13,7 +13,10 @@ let jiraBaseUrl = "https://miamed.atlassian.net/browse/"
 let storedKeys = []
 
 addProjBtn.addEventListener('click', () => controlModalDisplayStyle("block"))
-cancelBtn.addEventListener('click', () => controlModalDisplayStyle("none"))
+cancelBtn.addEventListener('click', () => {
+    controlModalDisplayStyle("none")
+    resetInputValue(addProjKeyInput);
+})
 addProjKeyBtn.onclick = addProjectKey;
 
 submitBtn.onclick = openNewTab;
@@ -69,9 +72,10 @@ function useStoredOptionsForDisplayInDOM() {
 }
 
 function addProjectKey(){
-    storedKeys.push(addProjKeyInput.value)
+    storedKeys.push(addProjKeyInput.value.toUpperCase())
     storeProjectKeys(storedKeys)
   //  controlModalDisplayStyle("none")
+    resetInputValue(addProjKeyInput)
     useStoredOptionsForDisplayInDOM()
  }
 
@@ -79,6 +83,11 @@ function addProjectKey(){
     storedKeys = storedKeys.filter(item => item !== projectKey);
     storeProjectKeys(storedKeys)
  }
+
+function resetInputValue(input){
+    input.value = ""
+}
+
 function storeProjectKeys(projectKeys){
     chrome.storage.local.set({
         projectKeys: projectKeys
