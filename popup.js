@@ -3,7 +3,8 @@ let addProjBtn = document.getElementById('addproject-btn')
 let addProjKeyInput = document.getElementById('addProjectKey-input')
 let addProjKeyBtn = document.getElementById('addProjectKey-btn')
 let cancelBtn = document.getElementById('cancel-btn')
-let modal = document.getElementById('modal')
+let keysModal = document.getElementById('keys-modal')
+let urlModal = document.getElementById('url-modal')
 let keyList = document.getElementById('keyList')
 let modalBackground = document.getElementById('modal-background')
 let issueIdInput = document.getElementById('id-input')
@@ -18,7 +19,6 @@ cancelBtn.addEventListener('click', () => {
     resetInputValue(addProjKeyInput);
 })
 addProjKeyBtn.onclick = addProjectKey;
-
 submitBtn.onclick = openNewTab;
 window.onload = useStoredOptionsForDisplayInDOM;
 projectKeySelect.onchange = makeDropDownSelectionDefault;
@@ -36,6 +36,7 @@ function openNewTab() {
     chrome.tabs.create({'url': url});
 }
 
+// Puts latest selection to top to make it default one for page reloads
 function makeDropDownSelectionDefault(){
     // TODO: make general function that takes param and makes it first array element
     storedKeys = storedKeys.filter(item => item !== projectKeySelect.value);
@@ -96,5 +97,5 @@ function storeProjectKeys(projectKeys){
 }
 
 function controlModalDisplayStyle(display){
-    modal.style.display = `${display}`
+    keysModal.style.display = `${display}`
 }
