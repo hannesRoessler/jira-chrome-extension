@@ -1,5 +1,6 @@
 let submitBtn = document.getElementById('submit-btn')
 let addProjBtn = document.getElementById('addproject-btn')
+let urlBtn = document.getElementById('url-btn')
 let addProjKeyInput = document.getElementById('addProjectKey-input')
 let addProjKeyBtn = document.getElementById('addProjectKey-btn')
 let cancelBtn = document.getElementById('cancel-btn')
@@ -8,19 +9,31 @@ let urlModal = document.getElementById('url-modal')
 let keyList = document.getElementById('keyList')
 let modalBackground = document.getElementById('modal-background')
 let issueIdInput = document.getElementById('id-input')
+let companyInput = document.getElementById('company-input')
+let urlComposition = document.getElementById('url-composition')
 let projectKeySelect = document.getElementById('project-select')
+let saveJiraUrlBtn = document.getElementById('save-url-btn')
 //let deleteBtn = document.getElementById('delete-btn')
-let jiraBaseUrl = "https://miamed.atlassian.net/browse/"
+let jiraBaseUrl = document.getElementById('jira-url-input')
+let jiraUrl = ""
 let storedKeys = []
 
-addProjBtn.addEventListener('click', () => controlModalDisplayStyle("block"))
+addProjBtn.addEventListener('click', () => controlModalDisplayStyle("block", keysModal))
+urlBtn.addEventListener('click', () => controlModalDisplayStyle("block", urlModal))
+saveJiraUrlBtn.addEventListener('click', () => {
+    storeJiraUrlElements(companyInput.value, jiraBaseUrl.value)
+    controlModalDisplayStyle("none", urlModal)
+})
 cancelBtn.addEventListener('click', () => {
-    controlModalDisplayStyle("none")
+    controlModalDisplayStyle("none", keysModal)
     resetInputValue(addProjKeyInput);
 })
 addProjKeyBtn.onclick = addProjectKey;
 submitBtn.onclick = openNewTab;
-window.onload = useStoredOptionsForDisplayInDOM;
+window.onload = () => {
+    useStoredOptionsForDisplayInDOM()
+    updateJiraUrlInUrlCompositionDom()
+}
 projectKeySelect.onchange = makeDropDownSelectionDefault;
 // Submit on Enter key press
 issueIdInput.onkeyup = () => {
@@ -28,11 +41,15 @@ issueIdInput.onkeyup = () => {
         openNewTab();
      }
 }
+companyInput.addEventListener('keyup',function(){
+    updateJiraUrlInUrlCompositionDom()
+});
+jiraBaseUrl.addEventListener('keyup',function(){jiraUrl()});
 
 
 
 function openNewTab() {
-    let url = generateUrl()
+    let url = generateIssueUrl()
     chrome.tabs.create({'url': url});
 }
 
@@ -44,7 +61,7 @@ function makeDropDownSelectionDefault(){
     storeProjectKeys(storedKeys)
 }
 
-function generateUrl() {
+function generateIssueUrl() {
     return jiraBaseUrl + projectKeySelect.value + "-" + issueIdInput.value;
 }
 
@@ -75,7 +92,6 @@ function useStoredOptionsForDisplayInDOM() {
 function addProjectKey(){
     storedKeys.push(addProjKeyInput.value.toUpperCase())
     storeProjectKeys(storedKeys)
-  //  controlModalDisplayStyle("none")
     resetInputValue(addProjKeyInput)
     useStoredOptionsForDisplayInDOM()
  }
@@ -96,6 +112,27 @@ function storeProjectKeys(projectKeys){
     useStoredOptionsForDisplayInDOM()
 }
 
-function controlModalDisplayStyle(display){
-    keysModal.style.display = `${display}`
+function controlModalDisplayStyle(display, modalType){    
+    modalType.style.display = `${display}`
 }
+
+function generateJiraUrl(){
+    return (`https://<b style="color: green;">${companyInput.value}</b>.${jiraBaseUrl.value}`);
+}
+
+function updateJiraUrlInUrlCompositionDom(){
+    urlComposition.innerHTML = generateJiraUrl();
+}
+
+function storeJiraUrlElements(companyName, jiraBaseUrl){
+    chrome.storage.local.set({
+        companyName: companyName,
+        jiraBaseUrl: jiraBaseUrl
+        })
+}
+// TODO: loading works, populate fields
+function loadJiraUrlElements(){
+    chrome.storage.local.get({companyName: '', jiraBaseUrl: ''}, function(items) {
+        alert(items.companyName + items.jiraBaseUrl)
+    } )
+} 

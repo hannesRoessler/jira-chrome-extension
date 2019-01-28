@@ -6,6 +6,12 @@
       rel="stylesheet"
     />
     <style>
+      h2{
+        align: center;
+      }
+      h4 {
+        margin: 5px;
+      }
       body {
         font-family: "Quicksand", sans-serif;
         background-color: #ecf0f1;
@@ -122,6 +128,7 @@
         width: 100%;
         display: flex;
         flex-direction: row;
+        flex: 50%;
         justify-content: space-between;
         align-items: center;
       }
@@ -168,7 +175,9 @@
   KEYSMODAL
 -->
     <div id="keys-modal" class="modal">
-      <div class="addkey-wrapper">
+      <div class="main-wrapper">
+      <h2>Add Project Keys</h2>
+        <div class="addkey-wrapper">
         <input
           type="text"
           autofocus
@@ -182,11 +191,19 @@
       <div id="keyList" class="keylist"></div>
       <div id="cancel-btn" class="close-btn"><div>Close</div></div>
     </div>
+    </div>
      <!--
   URLMODAL
 -->
     <div id="url-modal" class="modal">
-     TEST
+      <div class="main-wrapper">
+      <h2>Setup JIRA URL</h2>
+     <input id="company-input" type="text" placeholder="Enter JIRA Company Name e.g. 'google'">
+     <input id="jira-url-input" type="text" value="atlassian.net/browse/">
+     <h4>Your JIRA company URL</h2>
+     <div id="url-composition"></div>
+     <div id="save-url-btn" class="submit-btn">Save</div>
+    </div>
     </div>
     <!--
   MAIN SITE
@@ -216,10 +233,10 @@
               width="14px"
             />
           </div>
-          <div>Add keys</div>
+          <div>Manage keys</div>
         </div>
 
-        <div id="addproject-btn" class="twoStoreyBtn">
+        <div id="url-btn" class="twoStoreyBtn">
           <div class="icon">
             <img
               src="/images/settings.svg"
