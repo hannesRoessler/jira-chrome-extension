@@ -1,22 +1,22 @@
-let submitBtn = document.getElementById('submit-btn')
-let addProjBtn = document.getElementById('addproject-btn')
-let urlBtn = document.getElementById('url-btn')
-let addProjKeyInput = document.getElementById('addProjectKey-input')
-let addProjKeyBtn = document.getElementById('addProjectKey-btn')
-let cancelBtn = document.getElementById('cancel-btn')
-let keysModal = document.getElementById('keys-modal')
-let urlModal = document.getElementById('url-modal')
-let keyList = document.getElementById('keyList')
-let modalBackground = document.getElementById('modal-background')
-let issueIdInput = document.getElementById('id-input')
-let companyInput = document.getElementById('company-input')
-let urlComposition = document.getElementById('url-composition')
-let projectKeySelect = document.getElementById('project-select')
-let saveJiraUrlBtn = document.getElementById('save-url-btn')
-//let deleteBtn = document.getElementById('delete-btn')
-let jiraBaseUrl = document.getElementById('jira-url-input')
-let jiraUrl = ""
-let storedKeys = []
+const submitBtn = document.getElementById('submit-btn')
+const addProjBtn = document.getElementById('addproject-btn')
+const urlBtn = document.getElementById('url-btn')
+const addProjKeyInput = document.getElementById('addProjectKey-input')
+const addProjKeyBtn = document.getElementById('addProjectKey-btn')
+const cancelBtn = document.getElementById('cancel-btn')
+const keysModal = document.getElementById('keys-modal')
+const urlModal = document.getElementById('url-modal')
+const keyList = document.getElementById('keyList')
+const modalBackground = document.getElementById('modal-background')
+const issueIdInput = document.getElementById('id-input')
+const urlComposition = document.getElementById('url-composition')
+const projectKeySelect = document.getElementById('project-select')
+const saveJiraUrlBtn = document.getElementById('save-url-btn')
+const deleteBtn = document.getElementById('delete-btn')
+const companyInput = document.getElementById('company-input')
+const jiraBaseUrl = document.getElementById('jira-url-input')
+//let jiraUrl = ""
+let storedKeys = ["1"]
 
 addProjBtn.addEventListener('click', () => controlModalDisplayStyle("block", keysModal))
 urlBtn.addEventListener('click', () => controlModalDisplayStyle("block", urlModal))
@@ -29,27 +29,25 @@ cancelBtn.addEventListener('click', () => {
     resetInputValue(addProjKeyInput);
 })
 addProjKeyBtn.onclick = addProjectKey;
-submitBtn.onclick = openNewTab;
+submitBtn.onclick = () => openNewTab(issueIdInput.value);
 window.onload = () => {
     useStoredOptionsForDisplayInDOM()
-    updateJiraUrlInUrlCompositionDom()
+    populateUrlFieldsWithUrlElements()
 }
 projectKeySelect.onchange = makeDropDownSelectionDefault;
-// Submit on Enter key press
 issueIdInput.onkeyup = () => {
     if (event.keyCode === 13) {
-        openNewTab();
+        openNewTab(issueIdInput.value);
      }
 }
 companyInput.addEventListener('keyup',function(){
     updateJiraUrlInUrlCompositionDom()
 });
-jiraBaseUrl.addEventListener('keyup',function(){jiraUrl()});
+jiraBaseUrl.addEventListener('keyup',function(){updateJiraUrlInUrlCompositionDom()});
 
 
-
-function openNewTab() {
-    let url = generateIssueUrl()
+function openNewTab(inputValue) {
+    let url = generateIssueUrl(inputValue)
     chrome.tabs.create({'url': url});
 }
 
@@ -61,17 +59,20 @@ function makeDropDownSelectionDefault(){
     storeProjectKeys(storedKeys)
 }
 
-function generateIssueUrl() {
-    return jiraBaseUrl + projectKeySelect.value + "-" + issueIdInput.value;
+function generateIssueUrl(inputValue) {    
+    return `https://${companyInput.value}.${jiraBaseUrl.value + projectKeySelect.value}${inputValue ? '-' + issueIdInput.value : ''}`
 }
 
 function useStoredOptionsForDisplayInDOM() {
     chrome.storage.local.get({
         // TODO: build solution to create key if not existent, build general function
         // TODO: remove update-DOM logic from loadKeys from chrome storage
-        projectKeys: '',
+        projectKeys: [],
     }, function(items) {
         //Store retrieved options as the selected values in the DOM
+        if (items.projectKeys == "") {
+            controlModalDisplayStyle("block", keysModal)
+        }
         storedKeys = items.projectKeys
         projectKeySelect.innerHTML = "";
         keyList.innerHTML = "";
@@ -130,9 +131,27 @@ function storeJiraUrlElements(companyName, jiraBaseUrl){
         jiraBaseUrl: jiraBaseUrl
         })
 }
-// TODO: loading works, populate fields
-function loadJiraUrlElements(){
+
+function loadJiraUrlElements(cb){
     chrome.storage.local.get({companyName: '', jiraBaseUrl: ''}, function(items) {
-        alert(items.companyName + items.jiraBaseUrl)
-    } )
-} 
+        if (items.companyName == "" || items.jiraBaseUrl == "") {
+            controlModalDisplayStyle("block", urlModal)
+        }
+        else {
+            let jiraUrlItems = {
+                companyName: items.companyName,
+                jiraBaseUrl: items.jiraBaseUrl
+            }
+            cb && cb(jiraUrlItems);
+        }
+     })
+}
+
+function populateUrlFieldsWithUrlElements(){
+    loadJiraUrlElements(function(value) {
+        companyInput.value = value.companyName;
+        jiraBaseUrl.value = value.jiraBaseUrl;
+        updateJiraUrlInUrlCompositionDom()
+    })
+
+}
