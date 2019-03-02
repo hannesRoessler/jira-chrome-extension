@@ -1,6 +1,6 @@
 # JIRA Issue Quicklauncher - Chrome Extension
 
-This Google Chrome extension lets users quickly access JIRA issues by setting up a JIRA url, adding and selecting a project name and entering a JIRA issue ID.
+This Google Chrome extension lets users quickly access JIRA issues. Users first set up the basic JIRA URL and are then asked to add JIRA project keys. After setting up, users can select from existing project keys and enter a JIRA issue ID to open the issue link in a new tab.
 
 ## Getting Started
 
