@@ -16,7 +16,7 @@ const deleteBtn = document.getElementById('delete-btn')
 const companyInput = document.getElementById('company-input')
 const jiraBaseUrl = document.getElementById('jira-url-input')
 //let jiraUrl = ""
-let storedKeys = ["1"]
+let storedKeys = ["1"] 
 
 addProjBtn.addEventListener('click', () => controlModalDisplayStyle("block", keysModal))
 urlBtn.addEventListener('click', () => controlModalDisplayStyle("block", urlModal))
