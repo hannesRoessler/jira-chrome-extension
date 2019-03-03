@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css?family=Quicksand"
+      rel="stylesheet"
+    />
+    <style>
+      h2{
+        align: center;
+      }
+      h4 {
+        margin: 5px;
+      }
+      body {
+        font-family: "Quicksand", sans-serif;
+        background-color: #ecf0f1;
+      }
+      input {
+        padding: 10px;
+        margin-top: 10px;
+        width: 90%;
+        border: 0px;
+      }
+      button {
+        width: 100%;
+        margin-top: 10px;
+        padding: 5px;
+      }
+      select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border: 0px;
+      }
+      h2 {
+        margin: 5px;
+      }
+      ::-webkit-input-placeholder {
+        color: gray;
+        font-size: 10px;
+        font-style: italic;
+      }
+      .main-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        width: 250px;
+      }
+      .addkey-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+      }
+      .explanation-text {
+        font-size: 10px;
+        font-weight: 200;
+        font-style: italic;
+        color: gray;
+        margin-top: 10px;
+      }
+      .addProject-btn {
+        padding: 5px;
+        text-align: center;
+        vertical-align: center;
+        cursor: pointer;
+        align-self: center;
+        margin: 5px;
+        margin-top: 10px;
+        font-weight: 800;
+      }
+      .close-btn {
+        text-align: center;
+        vertical-align: center;
+        cursor: pointer;
+        align-self: center;
+        position: fixed;
+        right: 50%;
+        left: 50%;
+        bottom: 5px;
+        background-color: white;
+        font-weight: 900;
+      }
+      .modal {
+        height: 100%;
+        width: 260px;
+        background-color: #ecf0f1;
+        display: none;
+        left: 0px;
+        right: 0px;
+        z-index: 1;
+        align-content: center;
+        position: absolute;
+        padding: 5px;
+        overflow: auto;
+      }
+      .delete-btn {
+        width: 16px;
+        height: 16px;
+        line-height: 14px;
+        background-color: white;
+        font-size: 12px;
+        font-weight: 500;
+        color: cornflowerblue;
+        border-radius: 20px;
+        text-align: center;
+        vertical-align: center;
+        cursor: pointer;
+      }
+      .keylist-element {
+        display: flex;
+        flex-direction: row;
+        line-height: 14px;
+        background-color: #bdc3c7;
+        font-size: 12px;
+        font-weight: 500;
+        color: white;
+        border-radius: 5px;
+        text-align: center;
+        vertical-align: center;
+        cursor: default;
+        padding: 4px;
+        margin: 4px;
+        justify-content: space-between;
+        width: 200px;
+      }
+      .issue-key-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex: 50%;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .addProjectKey-input {
+        text-transform: uppercase;
+      }
+      .twoStoreyBtn-wrapper {
+        display: flex;
+        justify-content: center;
+      }
+      .twoStoreyBtn {
+        margin: 10px;
+        justify-content: center;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+        -webkit-transition: color 1s;
+      }
+      .twoStoreyBtn:hover {
+        color: rgb(95, 95, 95);
+      }
+      .icon {
+        margin-right: 4px;
+      }
+      .submit-btn {
+        margin: 5px;
+        font-weight: 500;
+        background-color: #34495e;
+        color: white;
+        padding: 10px;
+        font-size: 14px;
+        width: 90%;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+      }
+      .keylist {
+        margin-top: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+  KEYSMODAL
+-->
+    <div id="keys-modal" class="modal">
+      <div class="main-wrapper">
+      <h2>Add Project Keys</h2>
+        <div class="addkey-wrapper">
+        <input
+          type="text"
+          autofocus
+          placeholder="Add new project key, e.g. 'APP'"
+          id="addProjectKey-input"
+          class="addProjectKey-input"
+        />
+
+        <div id="addProjectKey-btn" class="addProject-btn">Add</div>
+      </div>
+      <div id="keyList" class="keylist"></div>
+      <div id="cancel-btn" class="submit-btn">Close</div>
+    </div>
+    </div>
+     <!--
+  URLMODAL
+-->
+    <div id="url-modal" class="modal">
+      <div class="main-wrapper">
+      <h2>Setup your JIRA URL</h2>
+     <input id="company-input" type="text" placeholder="Enter JIRA Company Name e.g. 'google'">
+     <input id="jira-url-input" type="text" value="atlassian.net/browse/">
+     <h4>Your JIRA company URL</h2>
+     <div id="url-composition"></div>
+     <div id="save-url-btn" class="submit-btn">Save</div>
+    </div>
+    </div>
+    <!--
+  MAIN SITE
+-->
+    <div class="main-wrapper">
+      <h2>JIRA Issue Launcher</h2>
+      <div class="issue-key-wrapper">
+        <select name="select" id="project-select"> </select>
+      </div>
+
+      <input
+        type="text"
+        autofocus
+        placeholder="Enter JIRA issue ID"
+        id="id-input"
+      />
+
+      <div id="submit-btn" class="submit-btn">Go! (Enter)</div>
+
+      <div class="twoStoreyBtn-wrapper">
+        <div id="addproject-btn" class="twoStoreyBtn">
+          <div class="icon">
+            <img
+              src="/images/add.svg"
+              alt="Add keys"
+              height="14px"
+              width="14px"
+            />
+          </div>
+          <div>Manage keys</div>
+        </div>
+
+        <div id="url-btn" class="twoStoreyBtn">
+          <div class="icon">
+            <img
+              src="/images/settings.svg"
+              alt="Settings"
+              height="14px"
+              width="14px"
+            />
+          </div>
+          <div>URL settings</div>
+        </div>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
